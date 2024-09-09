@@ -5,7 +5,7 @@ export const formatDate = (date: Date | number) => {
 export const formatMoney = (amount: number, currency: string) =>
 	new Intl.NumberFormat("en-US", {
 		style: "currency",
-		currency,
+		currency : "KES",
 	}).format(amount);
 
 export const formatMoneyRange = (
