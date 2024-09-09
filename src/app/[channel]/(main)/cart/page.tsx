@@ -70,7 +70,7 @@ export default async function Page({ params }: { params: { channel: string } }) 
 										)}
 									</div>
 									<p className="text-right font-semibold text-neutral-900">
-										{formatMoney(item.totalPrice.gross.amount, item.totalPrice.gross.currency)}
+										{formatMoney(item.totalPrice.gross.amount, "KES")}
 									</p>
 								</div>
 								<div className="flex justify-between">
@@ -90,7 +90,7 @@ export default async function Page({ params }: { params: { channel: string } }) 
 								<p className="mt-1 text-sm text-neutral-500">Shipping will be calculated in the next step</p>
 							</div>
 							<div className="font-medium text-neutral-900">
-								{formatMoney(checkout.totalPrice.gross.amount, checkout.totalPrice.gross.currency)}
+								{formatMoney(checkout.totalPrice.gross.amount, "KES")}
 							</div>
 						</div>
 					</div>
