@@ -15,8 +15,8 @@ export const formatMoneyRange = (
 	} | null,
 ) => {
 	const { start, stop } = range || {};
-	const startMoney = start && formatMoney(start.amount, "KES");
-	const stopMoney = stop && formatMoney(stop.amount, "KES");
+	const startMoney = start && formatMoney((start.amount)*120, "KES");
+	const stopMoney = stop && formatMoney((stop.amount)*120, "KES");
 
 	if (startMoney === stopMoney) {
 		return startMoney;

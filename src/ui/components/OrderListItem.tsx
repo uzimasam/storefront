@@ -95,7 +95,7 @@ export const OrderListItem = ({ order }: Props) => {
 												{item.quantity} ×{" "}
 												{item.variant.pricing?.price &&
 													formatMoney(
-														item.variant.pricing.price.gross.amount,
+														(item.variant.pricing.price.gross.amount)*120,
 														"KES",
 													)}
 											</td>
@@ -103,7 +103,7 @@ export const OrderListItem = ({ order }: Props) => {
 												<div className="flex flex-col gap-1 text-neutral-900">
 													{item.variant.pricing?.price &&
 														formatMoney(
-															item.variant.pricing.price.gross.amount * item.quantity,
+															(item.variant.pricing.price.gross.amount * item.quantity)*120,
 															"KES",
 														)}
 													{item.quantity > 1 && (
@@ -111,7 +111,7 @@ export const OrderListItem = ({ order }: Props) => {
 															{item.quantity} ×{" "}
 															{item.variant.pricing?.price &&
 																formatMoney(
-																	item.variant.pricing.price.gross.amount,
+																	(item.variant.pricing.price.gross.amount)*120,
 																	"KES",
 																)}
 														</span>
@@ -126,7 +126,7 @@ export const OrderListItem = ({ order }: Props) => {
 					</div>
 					<dl className="flex justify-between border-y py-6 text-sm font-medium text-neutral-900 md:border md:px-6">
 						<dt>Total amount including delivery</dt>
-						<dd>{formatMoney(order.total.gross.amount, "KES")}</dd>
+						<dd>{formatMoney((order.total.gross.amount)*120, "KES")}</dd>
 					</dl>
 				</>
 			)}
