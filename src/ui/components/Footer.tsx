@@ -1,24 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import { LinkWithChannel } from "../atoms/LinkWithChannel";
-import { ChannelSelect } from "./ChannelSelect";
-import { ChannelsListDocument, MenuGetBySlugDocument } from "@/gql/graphql";
-import { executeGraphQL } from "@/lib/graphql";
 
-export async function Footer({ channel }: { channel: string }) {
-	const footerLinks = await executeGraphQL(MenuGetBySlugDocument, {
-		variables: { slug: "footer", channel },
-		revalidate: 60 * 60 * 24,
-	});
-	const channels = process.env.SALEOR_APP_TOKEN
-		? await executeGraphQL(ChannelsListDocument, {
-				withAuth: false, // disable cookie-based auth for this call
-				headers: {
-					// and use app token instead
-					Authorization: `Bearer ${process.env.SALEOR_APP_TOKEN}`,
-				},
-		  })
-		: null;
+export async function Footer() {
 	const currentYear = new Date().getFullYear();
 
 	return (
