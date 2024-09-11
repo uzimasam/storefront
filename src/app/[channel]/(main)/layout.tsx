@@ -4,7 +4,7 @@ import { Header } from "@/ui/components/Header";
 
 export const metadata = {
 	title: "House of Qacym",
-	description: "A go to store for all your combat gear",
+	description: "A go to store for all your tactical gear",
 };
 
 export default function RootLayout(props: { children: ReactNode; params: { channel: string } }) {
