@@ -6,7 +6,7 @@ import { formatMoney, getHrefForVariant } from "@/lib/utils";
 import { LinkWithChannel } from "@/ui/atoms/LinkWithChannel";
 
 export const metadata = {
-	title: "Shopping Cart · Saleor Storefront example",
+	title: "Shopping Cart · House of Qacym",
 };
 
 export default async function Page({ params }: { params: { channel: string } }) {
