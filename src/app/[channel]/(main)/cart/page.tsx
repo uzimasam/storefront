@@ -95,11 +95,9 @@ export default async function Page({ params }: { params: { channel: string } }) 
 						</div>
 					</div>
 					<div className="mt-10 text-center">
-						<CheckoutLink
-							checkoutId={checkoutId}
-							disabled={!checkout.lines.length}
-							className="w-full sm:w-1/3"
-						/>
+						<a className="inline-block rounded bg-neutral-600 px-8 py-3 text-sm font-medium text-neutral-900 transition hover:scale-110 hover:shadow-xl focus:outline-none focus:ring active:bg-neutral-500" href="https://houseofqacym.vercel.app/checkout">
+  							Checkout Coming Soon
+						</a>
 					</div>
 				</div>
 			</form>
