@@ -17,7 +17,7 @@ export const ChannelSelect = ({
 				const newChannel = e.currentTarget.value;
 				return router.push(`/${newChannel}`);
 			}}
-			value={params.channel}
+			value={params?.channel || 'default-channel'}
 		>
 			{channels.map((channel) => (
 				<option key={channel.id} value={channel.slug}>
