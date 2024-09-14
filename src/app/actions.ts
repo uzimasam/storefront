@@ -50,8 +50,6 @@ export async function createBooking(
 		},
 	});
 
-	console.log("Parsed booking data", parse.data?.booking);
-
 
 	if (!parse.success) {
 		console.log("Failed to create booking", parse.error);
@@ -60,22 +58,17 @@ export async function createBooking(
 		};
 	}
 
-	console.log("Creating booking with data", parse.data);
-
 	const booking = parse.data.booking;
 
 	try {
 		await db.booking.create({
 			data: booking,
 		});
-
-		return {
-			message: "Booking created successfully",
-		};
+		prevState.message = "Booking created successfully";
 	} catch (error) {
-		console.error("Error creating booking", error);
-		return {
-			message: "An error occurred while creating the booking",
-		};
+		prevState.message = "An error occurred while creating the booking";
 	}
+	return {
+		message: prevState.message,
+	};
 }
