@@ -1,8 +1,8 @@
 "use server";
 
-import { getServerAuthClient } from "@/app/config";
 import { z } from "zod";
-import { db } from "@/lib/server";
+import { getServerAuthClient } from "@/app/config";
+import prisma from "@/lib/server";
 
 export async function logout() {
 	"use server";
@@ -36,8 +36,6 @@ export async function createBooking(
 	).join("");
 	const code = `${code1}-${code2}`;
 
-	// generate timestamp for created_at and updated_at
-
 	const parse = schema.safeParse({
 		booking: {
 			code: code,
@@ -61,7 +59,7 @@ export async function createBooking(
 	const booking = parse.data.booking;
 
 	try {
-		await db.booking.create({
+		await prisma.booking.create({
 			data: booking,
 		});
 		prevState.message = "Booking created successfully";

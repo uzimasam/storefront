@@ -1,9 +1,9 @@
 import Image from "next/image";
 import { DeleteLineButton } from "./DeleteLineButton";
+import { BookingForm } from "./BookingForm";
 import * as Checkout from "@/lib/checkout";
 import { formatMoney, getHrefForVariant } from "@/lib/utils";
 import { LinkWithChannel } from "@/ui/atoms/LinkWithChannel";
-import { BookingForm } from "./BookingForm";
 
 export const metadata = {
 	title: "Shopping Cart · House of Qacym",
