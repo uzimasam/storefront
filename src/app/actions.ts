@@ -15,6 +15,12 @@ export async function createBooking(
 	},
 	formData: FormData
 ) {
+	try{
+		prevState.message = "";
+	}
+	catch(e){
+		console.log(e);
+	}
 	const schema = z.object({
 		booking: z.object({
 			code: z.string(),
@@ -62,11 +68,12 @@ export async function createBooking(
 		await prisma.booking.create({
 			data: booking,
 		});
-		prevState.message = "Booking created successfully";
+		return {
+			message: "Booking created successfully",
+		};
 	} catch (error) {
-		prevState.message = "An error occurred while creating the booking";
+		return {
+			message: "An error occurred while creating the booking",
+		};
 	}
-	return {
-		message: prevState.message,
-	};
 }
