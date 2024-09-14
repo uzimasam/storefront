@@ -45,15 +45,6 @@
 - Hamburger menu
 - SEO data
 
-**Checkout:**
-
-- Single page checkout (including login)
-- Portable to other frameworks (doesn't use Next.js components)
-- Adyen integration
-- Stripe integration
-- Customer address book
-- Vouchers and Gift Cards
-
 **Product catalog:**
 
 - Categories
