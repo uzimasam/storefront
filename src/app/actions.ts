@@ -68,8 +68,32 @@ export async function createBooking(
 		await prisma.booking.create({
 			data: booking,
 		});
+		// make api call to request payment https://api.mypayd.app/api/v2/payments using basic auth
+		const url = "https://api.mypayd.app/api/v2/payments";
+		const username = process.env.MYPAYD_API_USERNAME;
+		const password = process.env.MYPAYD_API_PASSWORD;
+		const wallet = process.env.MYPAYD_WALLET;
+		const response = await fetch(url, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Basic ${btoa(`${username}:${password}`)}`,
+			},
+			body: JSON.stringify({
+				username: wallet,
+				network_code: "63902",
+				amount: booking.amount,
+				currency: "KES",
+				phone_number: booking.phone_number,
+				narration: " Payment Request at House of Qacym",
+				callback_url: "https://houseofqacym.vercel.app/api/callback/" + booking.code,
+			}),
+		});
+		const data = await response.json() as { message: string };
+		console.log(data);
 		return {
-			message: "Booking created successfully",
+			// message from the payment gateway
+			message: data.message,
 		};
 	} catch (error) {
 		return {
