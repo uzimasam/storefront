@@ -14,7 +14,7 @@ generator client {
 }
 
 model Booking {
-  id        String  @id @default(cuid()) @map("_id") @db.ObjectId
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
   code      String  @unique
   first_name String
   last_name  String
@@ -22,4 +22,6 @@ model Booking {
   phone_number String
   amount     Float
   status     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

@@ -1,9 +1,9 @@
 import Image from "next/image";
-import { CheckoutLink } from "./CheckoutLink";
 import { DeleteLineButton } from "./DeleteLineButton";
 import * as Checkout from "@/lib/checkout";
 import { formatMoney, getHrefForVariant } from "@/lib/utils";
 import { LinkWithChannel } from "@/ui/atoms/LinkWithChannel";
+import { BookingForm } from "./BookingForm";
 
 export const metadata = {
 	title: "Shopping Cart · House of Qacym",
@@ -34,156 +34,67 @@ export default async function Page({ params }: { params: { channel: string } }) 
 	return (
 		<section className="mx-auto max-w-7xl p-8">
 			<h1 className="mt-8 text-3xl font-bold text-neutral-900">Your Shopping Cart</h1>
-			<form className="mt-12">
-				<ul
-					data-testid="CartProductList"
-					role="list"
-					className="divide-y divide-neutral-200 border-b border-t border-neutral-200"
-				>
-					{checkout.lines.map((item) => (
-						<li key={item.id} className="flex py-4">
-							<div className="aspect-square h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border bg-neutral-50 sm:h-32 sm:w-32">
-								{item.variant?.product?.thumbnail?.url && (
-									<Image
-										src={item.variant.product.thumbnail.url}
-										alt={item.variant.product.thumbnail.alt ?? ""}
-										width={200}
-										height={200}
-										className="h-full w-full object-contain object-center"
-									/>
-								)}
-							</div>
-							<div className="relative flex flex-1 flex-col justify-between p-4 py-2">
-								<div className="flex justify-between justify-items-start gap-4">
-									<div>
-										<LinkWithChannel
-											href={getHrefForVariant({
-												productSlug: item.variant.product.slug,
-												variantId: item.variant.id,
-											})}
-										>
-											<h2 className="font-medium text-neutral-700">{item.variant?.product?.name}</h2>
-										</LinkWithChannel>
-										<p className="mt-1 text-sm text-neutral-500">{item.variant?.product?.category?.name}</p>
-										{item.variant.name !== item.variant.id && Boolean(item.variant.name) && (
-											<p className="mt-1 text-sm text-neutral-500">Variant: {item.variant.name}</p>
-										)}
-									</div>
-									<p className="text-right font-semibold text-neutral-900">
-										{formatMoney((item.totalPrice.gross.amount)*120, "KES")}
-									</p>
+			<ul
+            	data-testid="CartProductList"
+            	className="divide-y divide-neutral-200 border-b border-t border-neutral-200"
+        	>
+				{checkout.lines.map((item) => (
+					<li key={item.id} className="flex py-4">
+						<div className="aspect-square h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border bg-neutral-50 sm:h-32 sm:w-32">
+							{item.variant?.product?.thumbnail?.url && (
+								<Image
+									src={item.variant.product.thumbnail.url}
+									alt={item.variant.product.thumbnail.alt ?? ""}
+									width={200}
+									height={200}
+									className="h-full w-full object-contain object-center"
+								/>
+							)}
+						</div>
+						<div className="relative flex flex-1 flex-col justify-between p-4 py-2">
+							<div className="flex justify-between justify-items-start gap-4">
+								<div>
+									<LinkWithChannel
+										href={getHrefForVariant({
+											productSlug: item.variant.product.slug,
+											variantId: item.variant.id,
+										})}
+									>
+										<h2 className="font-medium text-neutral-700">{item.variant?.product?.name}</h2>
+									</LinkWithChannel>
+									<p className="mt-1 text-sm text-neutral-500">{item.variant?.product?.category?.name}</p>
+									{item.variant.name !== item.variant.id && Boolean(item.variant.name) && (
+										<p className="mt-1 text-sm text-neutral-500">Variant: {item.variant.name}</p>
+									)}
 								</div>
-								<div className="flex justify-between">
-									<div className="text-sm font-bold">Qty: {item.quantity}</div>
-									<DeleteLineButton checkoutId={checkoutId} lineId={item.id} />
-								</div>
+								<p className="text-right font-semibold text-neutral-900">
+									{formatMoney((item.totalPrice.gross.amount)*120, "KES")}
+								</p>
 							</div>
-						</li>
-					))}
-				</ul>
+							<div className="flex justify-between">
+								<div className="text-sm font-bold">Qty: {item.quantity}</div>
+								<DeleteLineButton checkoutId={checkoutId} lineId={item.id} />
+							</div>
+						</div>
+					</li>
+				))}
+			</ul>
 
-				<div className="mt-12">
-					<div className="rounded border bg-neutral-50 px-4 py-2">
-						<div className="flex items-center justify-between gap-2 p7-2">
-							<div>
-								<p className="font-semibold text-neutral-900">Your Total</p>
-							</div>
-							<div className="font-medium text-neutral-900">
-								{formatMoney((checkout.totalPrice.gross.amount)*120, "KES")}
-								<p className="text-sm text-neutral-500">Inclusive of all taxes</p>
-							</div>
+				
+			<div className="mt-12">
+				<div className="rounded border bg-neutral-50 px-4 py-4">
+					<div className="flex items-center justify-between gap-2 p7-2">
+						<div>
+							<p className="font-semibold text-neutral-900">Your Total</p>
 						</div>
-					</div>
-					<div className="rounded border bg-neutral-50 px-4 py-2 mt-12">
-						<div className="bg-neutral-50 px-4 py-2">
-							<p className="mt-1 text-sm text-neutral-500">Fill in your details below accurately to proceed to checkout.</p>
-							<p className="mt-1 text-sm text-neutral-500">The email you provide will be used to send you a receipt of your purchase and a link to track your order.</p>
-							<p className="mt-1 text-sm text-neutral-500">The phone number you provide <b>Should</b> be a valid M-Pesa number. Purchases made through this platform are strictly paid for via M-Pesa.</p>
+						<div className="font-medium text-neutral-900">
+							{formatMoney((checkout.totalPrice.gross.amount)*120, "KES")}
+							<p className="text-sm text-neutral-500">Inclusive of all taxes</p>
 						</div>
-						<div className="grid grid-cols-1 gap-4 lg:grid-cols-4 lg:gap-8 py-4">
-  							<div className="rounded-lg">
-								<label
-  									htmlFor="first_name"
-  									className="relative block overflow-hidden rounded-md border border-gray-200 px-3 pt-3 shadow-sm focus-within:border-black focus-within:ring-1 focus-within:ring-black"
-								>
-									<input
-    									type="text"
-    									id="first_name"
-										className="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
-    									placeholder="First Name"
-  									/>
-  									<span
-    									className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs"
-  									>
-    									First Name
-  									</span>
-								</label>
-							</div>
-  							<div className="rounded-lg">
-								<label
-  									htmlFor="last_name"
-  									className="relative block overflow-hidden rounded-md border border-gray-200 px-3 pt-3 shadow-sm focus-within:border-black focus-within:ring-1 focus-within:ring-black"
-								>
-									<input
-    									type="text"
-    									id="last_name"
-										className="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
-    									placeholder="Last Name"
-  									/>
-  									<span
-    									className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs"
-  									>
-    									Last Name
-  									</span>
-								</label>
-							</div>
-  							<div className="rounded-lg">
-								<label
-  									htmlFor="email"
-  									className="relative block overflow-hidden rounded-md border border-gray-200 px-3 pt-3 shadow-sm focus-within:border-black focus-within:ring-1 focus-within:ring-black"
-								>
-									<input
-    									type="email"
-    									id="email"
-										className="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
-    									placeholder="Email"
-  									/>
-  									<span
-    									className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs"
-  									>
-    									Email
-  									</span>
-								</label>
-							</div>
-  							<div className="rounded-lg">
-								<label
-  									htmlFor="phone_number"
-  									className="relative block overflow-hidden rounded-md border border-gray-200 px-3 pt-3 shadow-sm focus-within:border-black focus-within:ring-1 focus-within:ring-black"
-								>
-									<input
-    									type="text"
-    									id="phone_number"
-										className="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
-    									placeholder="Phone Number"
-  									/>
-  									<span
-    									className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs"
-  									>
-    									Phone Number
-  									</span>
-								</label>
-							</div>
-						</div>
-					</div>
-					<div className="mt-10 text-center">
-						<CheckoutLink
-							checkoutId={checkoutId}
-							disabled={!checkout.lines.length}
-							className="w-full sm:w-1/3"
-						/>
 					</div>
 				</div>
-			</form>
+			</div>
+			<BookingForm amount={(checkout.totalPrice.gross.amount)*120} />
 		</section>
 	);
 }
