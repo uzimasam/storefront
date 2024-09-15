@@ -49,93 +49,116 @@ export function BookingForm({ amount }: { amount: number }) {
     return (
         <form action={formAction} className="mt-12">
             <input type="hidden" name="amount" value={amount} />
-            <div className="rounded border bg-neutral-50 px-4 py-2 mt-12">
+            <div className="border-b border-t border-neutral-200 lg:grid lg:grid-cols-2 lg:gap-8">
                 <div className="bg-neutral-50 px-4 py-2">
-                    <p className="mt-1 text-sm text-neutral-500">Fill in your details below accurately to proceed to checkout.</p>
-                    <p className="mt-1 text-sm text-neutral-500">The email you provide will be used to send you a receipt of your purchase and a link to track your order.</p>
-                    <p className="mt-1 text-sm text-neutral-500">The phone number you provide <b>Should</b> be a valid M-Pesa number. Purchases made through this platform are strictly paid for via M-Pesa.</p>
+			        <h1 className="mt-4 text-2xl font-bold text-neutral-900">Mpesa Checkout</h1>
+                    <ul className="">
+                        <li className="flex py-4">
+                            <div className="aspect-square h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border bg-neutral-50 sm:h-32 sm:w-32">
+                                <img
+                                    src="/mpesa1.png"
+                                    alt="Mpesa Logo"
+                                    width={200}
+                                    height={200}
+                                    className="h-full w-full object-contain object-center"
+                                />
+                            </div>
+                            <div className="relative flex flex-1 flex-col justify-between p-4 py-2">
+                                <div className="flex justify-between justify-items-start gap-4">
+                                    <div>
+                                        <h2 className="font-medium text-neutral-700">Mpesa Checkout</h2>
+                                    </div>
+                                    <p className="text-right font-semibold text-neutral-900">
+                                        KES {amount}
+                                    </p>
+                                </div>
+                                <div className="flex justify-between">
+                                    <p className="mt-1 text-sm text-neutral-500">The phone number you provide <b>Should</b> be a valid M-Pesa number. Purchases made through this platform are strictly paid for via M-Pesa.</p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-                <div className="grid grid-cols-1 gap-4 lg:grid-cols-4 lg:gap-8 py-4">
-                    <div className="rounded-lg">
-                        <label
-                            htmlFor="first_name"
-                            className="relative block overflow-hidden rounded-md border border-gray-200 px-3 pt-3 shadow-sm focus-within:border-black focus-within:ring-1 focus-within:ring-black"
-                        >
-                            <input
-                                type="text"
-                                id="first_name"
-                                name="first_name"
-                                className="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
-                                placeholder="First Name"
-                                required
-                            />
-                            <span
-                                className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs"
+                <div className="px-4 py-2">
+                    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-8 py-4">
+                        <div className="rounded-lg">
+                            <label
+                                htmlFor="first_name"
+                                className="relative block overflow-hidden rounded-md border border-neutral-300 bg-transparent bg-white px-4 py-2 pr-10 text-sm text-black placeholder:text-neutral-500 focus:border-black focus:ring-black"
                             >
-                                First Name
-                            </span>
-                        </label>
-                    </div>
-                    <div className="rounded-lg">
-                        <label
-                            htmlFor="last_name"
-                            className="relative block overflow-hidden rounded-md border border-gray-200 px-3 pt-3 shadow-sm focus-within:border-black focus-within:ring-1 focus-within:ring-black"
-                        >
-                            <input
-                                type="text"
-                                id="last_name"
-                                name="last_name"
-                                className="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
-                                placeholder="Last Name"
-                                required
-                            />
-                            <span
-                                className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs"
+                                <input
+                                    type="text"
+                                    id="first_name"
+                                    name="first_name"
+                                    className="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
+                                    required
+                                />
+                                <span
+                                    className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs"
+                                >
+                                    First Name
+                                </span>
+                            </label>
+                        </div>
+                        <div className="rounded-lg">
+                            <label
+                                htmlFor="last_name"
+                                className="relative block overflow-hidden rounded-md border border-neutral-300 bg-transparent bg-white px-4 py-2 pr-10 text-sm text-black placeholder:text-neutral-500 focus:border-black focus:ring-black"
                             >
-                                Last Name
-                            </span>
-                        </label>
-                    </div>
-                    <div className="rounded-lg">
-                        <label
-                            htmlFor="email"
-                            className="relative block overflow-hidden rounded-md border border-gray-200 px-3 pt-3 shadow-sm focus-within:border-black focus-within:ring-1 focus-within:ring-black"
-                        >
-                            <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                className="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
-                                placeholder="Email"
-                                required
-                            />
-                            <span
-                                className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs"
+                                <input
+                                    type="text"
+                                    id="last_name"
+                                    name="last_name"
+                                    className="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
+                                    required
+                                />
+                                <span
+                                    className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs"
+                                >
+                                    Last Name
+                                </span>
+                            </label>
+                        </div>
+                        <div className="rounded-lg">
+                            <label
+                                htmlFor="email"
+                                className="relative block overflow-hidden rounded-md border border-neutral-300 bg-transparent bg-white px-4 py-2 pr-10 text-sm text-black placeholder:text-neutral-500 focus:border-black focus:ring-black"
                             >
-                                Email
-                            </span>
-                        </label>
-                    </div>
-                    <div className="rounded-lg">
-                        <label
-                            htmlFor="phone_number"
-                            className="relative block overflow-hidden rounded-md border border-gray-200 px-3 pt-3 shadow-sm focus-within:border-black focus-within:ring-1 focus-within:ring-black"
-                        >
-                            <input
-                                type="text"
-                                id="phone_number"
-                                name="phone_number"
-                                className="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
-                                placeholder="Phone Number"
-                                required
-                            />
-                            <span
-                                className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs"
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    className="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
+                                    required
+                                />
+                                <span
+                                    className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs"
+                                >
+                                    Email
+                                </span>
+                            </label>
+                        </div>
+                        <div className="rounded-lg">
+                            <label
+                                htmlFor="phone_number"
+                                className="relative block overflow-hidden rounded-md border border-neutral-300 bg-transparent bg-white px-4 py-2 pr-10 text-sm text-black placeholder:text-neutral-500 focus:border-black focus:ring-black"
                             >
-                                Phone Number
-                            </span>
-                        </label>
+                                <input
+                                    type="text"
+                                    id="phone_number"
+                                    name="phone_number"
+                                    className="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
+                                    required
+                                />
+                                <span
+                                    className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs"
+                                >
+                                    Phone Number
+                                </span>
+                            </label>
+                        </div>
                     </div>
+                    <p className="mt-1 text-sm text-neutral-500">The email you provide will be used to send you a receipt of your purchase and a link to track your order.</p>
                 </div>
             </div>
             <div className="mt-10 text-center">

@@ -77,7 +77,7 @@ export async function createBooking(
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Basic ${btoa(`${username}:${password}`)}`,
+				Authorization: "Basic " + btoa(username + ":" + password),
 			},
 			body: JSON.stringify({
 				username: wallet,
@@ -91,6 +91,9 @@ export async function createBooking(
 		});
 		const data = await response.json() as { message: string };
 		console.log(data);
+		// if successful, return the message from the payment gateway
+		// save the items in the cart to the database
+		// clear cart and display success message
 		return {
 			// message from the payment gateway
 			message: data.message,
