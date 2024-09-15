@@ -90,6 +90,8 @@ export function BookingForm({ amount }: { amount: number }) {
                                     type="text"
                                     id="first_name"
                                     name="first_name"
+                                    placeholder="First Name"
+                                    autoComplete="given-name"
                                     className="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
                                     required
                                 />
@@ -109,6 +111,8 @@ export function BookingForm({ amount }: { amount: number }) {
                                     type="text"
                                     id="last_name"
                                     name="last_name"
+                                    placeholder="Last Name"
+                                    autoComplete="family-name"
                                     className="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
                                     required
                                 />
@@ -128,6 +132,9 @@ export function BookingForm({ amount }: { amount: number }) {
                                     type="email"
                                     id="email"
                                     name="email"
+                                    placeholder="Email"
+                                    autoComplete="email"
+                                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
                                     className="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
                                     required
                                 />
@@ -147,6 +154,9 @@ export function BookingForm({ amount }: { amount: number }) {
                                     type="text"
                                     id="phone_number"
                                     name="phone_number"
+                                    placeholder="Phone Number"
+                                    pattern="^(07|\+2547|2547|01|\+2541|2541|7|1)\d{8}$"
+                                    autoComplete="tel"
                                     className="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
                                     required
                                 />
