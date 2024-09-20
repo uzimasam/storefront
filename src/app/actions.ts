@@ -68,6 +68,7 @@ export async function createBooking(
 		await prisma.booking.create({
 			data: booking,
 		});
+		// 👉Order placed. Sending payment request
 		// make api call to request payment https://api.mypayd.app/api/v2/payments using basic auth
 		const url = "https://api.mypayd.app/api/v2/payments";
 		const username = process.env.MYPAYD_API_USERNAME;
@@ -91,9 +92,12 @@ export async function createBooking(
 		});
 		const data = await response.json() as { message: string };
 		console.log(data);
+		// 👉Gateway message. Waiting for payment
 		// if successful, return the message from the payment gateway
+		// 👉Payment received. Processing order
 		// save the items in the cart to the database
 		// clear cart and display success message
+		// 👉Order successful. Redirecting to home page
 		return {
 			// message from the payment gateway
 			message: data.message,
@@ -103,4 +107,9 @@ export async function createBooking(
 			message: "An error occurred while creating the booking",
 		};
 	}
+
+	// retun a success response
+	return {
+		message: "Booking created successfully",
+	};
 }
