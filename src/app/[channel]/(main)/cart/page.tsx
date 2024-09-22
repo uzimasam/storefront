@@ -68,7 +68,7 @@ export default async function Page({ params }: { params: { channel: string } }) 
 									)}
 								</div>
 								<p className="text-right font-semibold text-neutral-900">
-									{formatMoney((item.totalPrice.gross.amount)*120, "KES")}
+									{formatMoney((item.totalPrice.gross.amount), "KES")}
 								</p>
 							</div>
 							<div className="flex justify-between">
@@ -88,13 +88,13 @@ export default async function Page({ params }: { params: { channel: string } }) 
 							<p className="font-semibold text-neutral-900">Your Total</p>
 						</div>
 						<div className="font-medium text-neutral-900">
-							{formatMoney((checkout.totalPrice.gross.amount)*120, "KES")}
+							{formatMoney((checkout.totalPrice.gross.amount), "KES")}
 							<p className="text-sm text-neutral-500">Inclusive of all taxes</p>
 						</div>
 					</div>
 				</div>
 			</div>
-			<BookingForm amount={(checkout.totalPrice.gross.amount)*120} />
+			<BookingForm amount={(checkout.totalPrice.gross.amount)} />
 		</section>
 	);
 }

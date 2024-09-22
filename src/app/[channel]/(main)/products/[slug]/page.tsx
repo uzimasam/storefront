@@ -130,7 +130,7 @@ export default async function Page({
 	const isAvailable = variants?.some((variant) => variant.quantityAvailable) ?? false;
 
 	const price = selectedVariant?.pricing?.price?.gross
-		? formatMoney((selectedVariant.pricing.price.gross.amount)*120, "KES")
+		? formatMoney((selectedVariant.pricing.price.gross.amount), "KES")
 		: isAvailable
 		  ? formatMoneyRange({
 					start: product?.pricing?.priceRange?.start?.gross,
