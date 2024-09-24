@@ -48,20 +48,39 @@ export function BookingForm({ amount }: { amount: number }) {
     const formRef = useRef<HTMLFormElement | null>(null);
     const [state, formAction] = useFormState(createBooking, initialState );
     const [isSuccess, setIsSuccess] = useState(false);
+    const [serverResponse, setServerResponse] = useState<string | null>(null);
 
-    const handleSubmit = async (event: React.FormEvent) => {
-        event.preventDefault();
-        const formData = new FormData(formRef.current!);
-        formData.append('message', state.message);
-        formAction(formData);
+    const handleSubmit = async (formData: FormData) => {
+        // console.log('form data', formData);
+        // const first_name = formData.get('first_name');
+        // console.log('first_name', first_name);
+        
+
+    try {
+        const response = await createBooking(initialState, formData);
+        console.log("response", response);
+        setServerResponse(response.message);
         setIsSuccess(true);
+    } catch (error) {
+        console.log("error", error);
+        
+    }
+        
+
+        //
+        
+    //     const formData = new FormData(formRef.current!);
+    //     formData.append('message', state.message);
+    //    const response = formAction(formData);
+    //    console.log('response', response);
+        // setIsSuccess(true);
     }
 
 
     return (
         <section>
             {isSuccess ? (
-			    <article className="rounded-xl border-2 border-gray-100 bg-white">
+			    <article className="rounded-xl border-2 border-gray-100 bg-white mt-12">
                     <div className="flex items-start gap-4 p-4 sm:p-6 lg:p-8">
                         <a href="/" className="block shrink-0">
                                 <img alt="House of Qacym" src="/icon.svg" className="size-14 rounded-lg object-cover"/>
@@ -71,7 +90,7 @@ export function BookingForm({ amount }: { amount: number }) {
                                 <span className="hover:underline"> Your Order Has Been Placed</span>
                             </h3>
                             <p className="line-clamp-2 text-sm text-gray-700">
-                                M-pesa payment request has been sent to your phone. Please complete the payment to confirm your booking.
+                                {serverResponse}
                             </p>
                         </div>
                     </div>
@@ -83,7 +102,7 @@ export function BookingForm({ amount }: { amount: number }) {
                     </div>
                 </article>
             ) : (
-                <form action={formAction} className="mt-12" onSubmit={handleSubmit} ref={formRef}>
+                <form action={handleSubmit} className="mt-12" ref={formRef}>
                     <input type="hidden" name="amount" value={amount} />
                     <div className="border-b border-t border-neutral-200 lg:grid lg:grid-cols-2 lg:gap-8">
                         <div className="bg-neutral-50 px-4 py-2">
@@ -214,6 +233,7 @@ export function BookingForm({ amount }: { amount: number }) {
                         </output>
                     </div>   
                 </form>
+         
             )}
         </section>
     );
