@@ -14,14 +14,25 @@ generator client {
 }
 
 model Booking {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  code      String  @unique
-  first_name String
-  last_name  String
-  email      String
-  phone_number String
-  amount     Float
-  status     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  code              String      @unique
+  first_name        String
+  last_name         String
+  email             String
+  phone_number      String
+  amount            Float
+  status            String
+  callback_response String
+  cartItems         CartItems[]
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+}
+
+model CartItems {
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  product_name    String
+  product_price   Float
+  product_variant String
+  booking         Booking @relation(fields: [bookingId], references: [id])
+  bookingId       String  @db.ObjectId
 }
