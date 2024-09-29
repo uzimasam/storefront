@@ -94,7 +94,7 @@ export default async function Page({ params }: { params: { channel: string } }) 
 					</div>
 				</div>
 			</div>
-			<BookingForm amount={(checkout.totalPrice.gross.amount)} />
+			<BookingForm amount={(checkout.totalPrice.gross.amount)} checkoutId={checkoutId} />
 		</section>
 	);
 }

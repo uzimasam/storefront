@@ -22,7 +22,7 @@ model Booking {
   phone_number      String
   amount            Float
   status            String
-  callback_response String
+  callback_response String?
   cartItems         CartItems[]
   createdAt         DateTime    @default(now())
   updatedAt         DateTime    @updatedAt
@@ -33,6 +33,7 @@ model CartItems {
   product_name    String
   product_price   Float
   product_variant String
+  quantity        Int
   booking         Booking @relation(fields: [bookingId], references: [id])
   bookingId       String  @db.ObjectId
 }

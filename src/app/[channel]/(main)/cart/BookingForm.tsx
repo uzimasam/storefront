@@ -44,36 +44,32 @@ function SubmitButton() {
     );
 }
 
-export function BookingForm({ amount }: { amount: number }) {
+interface BookingFormProps {
+    amount: number;
+    checkoutId: string;
+}
+
+export function BookingForm({amount, checkoutId }: BookingFormProps) {
     const formRef = useRef<HTMLFormElement | null>(null);
     const [state, formAction] = useFormState(createBooking, initialState );
     const [isSuccess, setIsSuccess] = useState(false);
+    const [isError, setIsError] = useState(false);
     const [serverResponse, setServerResponse] = useState<string | null>(null);
 
     const handleSubmit = async (formData: FormData) => {
-        // console.log('form data', formData);
-        // const first_name = formData.get('first_name');
-        // console.log('first_name', first_name);
-        
-
-    try {
-        const response = await createBooking(initialState, formData);
-        console.log("response", response);
-        setServerResponse(response.message);
-        setIsSuccess(true);
-    } catch (error) {
-        console.log("error", error);
-        
-    }
-        
-
-        //
-        
-    //     const formData = new FormData(formRef.current!);
-    //     formData.append('message', state.message);
-    //    const response = formAction(formData);
-    //    console.log('response', response);
-        // setIsSuccess(true);
+        try {
+            const response = await createBooking(initialState, formData);
+            if (response.status === "error") {
+                setIsError(true);
+            }
+            else{
+                setIsSuccess(true);
+            }
+            setServerResponse(response.message);
+        }
+        catch (error) {
+            console.error("error", error);
+        }
     }
 
 
@@ -102,8 +98,10 @@ export function BookingForm({ amount }: { amount: number }) {
                     </div>
                 </article>
             ) : (
+                <div>
                 <form action={handleSubmit} className="mt-12" ref={formRef}>
                     <input type="hidden" name="amount" value={amount} />
+                    <input type="hidden" name="cart" value={checkoutId} />
                     <div className="border-b border-t border-neutral-200 lg:grid lg:grid-cols-2 lg:gap-8">
                         <div className="bg-neutral-50 px-4 py-2">
 			                <h1 className="mt-4 text-2xl font-bold text-neutral-900">Mpesa Checkout</h1>
@@ -189,7 +187,6 @@ export function BookingForm({ amount }: { amount: number }) {
                                             name="email"
                                             placeholder="Email"
                                             autoComplete="email"
-                                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
                                             className="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
                                             required
                                         />
@@ -233,7 +230,14 @@ export function BookingForm({ amount }: { amount: number }) {
                         </output>
                     </div>   
                 </form>
-         
+                <div className="mt-4 text-center">
+                    {isError && (
+                        <div className="text-red-600">
+                            {serverResponse}
+                        </div>
+                    )}
+                </div>
+                </div>
             )}
         </section>
     );
