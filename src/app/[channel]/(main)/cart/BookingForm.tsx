@@ -44,12 +44,21 @@ function SubmitButton() {
     );
 }
 
+type CartItem = {
+    productName: string;
+    variantName: string;
+    quantity: number;
+    price: number;
+};
+type CartItems = CartItem[];
+
 interface BookingFormProps {
     amount: number;
     checkoutId: string;
+    cartItems: CartItems;
 }
 
-export function BookingForm({amount, checkoutId }: BookingFormProps) {
+export function BookingForm({amount, checkoutId, cartItems }: BookingFormProps) {
     const formRef = useRef<HTMLFormElement | null>(null);
     const [state, formAction] = useFormState(createBooking, initialState );
     const [isSuccess, setIsSuccess] = useState(false);
@@ -102,6 +111,7 @@ export function BookingForm({amount, checkoutId }: BookingFormProps) {
                 <form action={handleSubmit} className="mt-12" ref={formRef}>
                     <input type="hidden" name="amount" value={amount} />
                     <input type="hidden" name="cart" value={checkoutId} />
+                    <input type="hidden" name="cartItems" value={JSON.stringify(cartItems)} />
                     <div className="border-b border-t border-neutral-200 lg:grid lg:grid-cols-2 lg:gap-8">
                         <div className="bg-neutral-50 px-4 py-2">
 			                <h1 className="mt-4 text-2xl font-bold text-neutral-900">Mpesa Checkout</h1>

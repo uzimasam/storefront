@@ -32,33 +32,13 @@ export async function createBooking(
 			amount: z.number(),
 			status: z.string()
 		}),
-		cartItems: z.array(z.object({
-			id: z.string(),
-			quantity: z.number(),
-			variant: z.object({
-				id: z.string(),
-				product: z.object({
-					id: z.string(),
-					name: z.string(),
-					slug: z.string(),
-					thumbnail: z.object({
-						url: z.string(),
-						alt: z.string().optional(),
-					}),
-				}),
-			}),
-		})),
 	});
 	// link cart items to the booking
 	const checkoutId = formData.get("cart") as string;
 	const checkout = await Checkout.find(checkoutId);
-	const cartItems = checkout?.lines ?? [];
-	if (!cartItems.length) {
-		return {
-			message: "Cart is empty",
-			status: "error",
-		};
-	}
+	const cartItems = formData.getAll("cartItems") as string[];
+	const cartItems2 = cartItems.map((item) => JSON.parse(item));
+	const cartItems3 = cartItems2[0] as { productName: string; variantName: string; quantity: number; price: number }[];
 	// generate a new booking code in the format XXXX-XXXX where X is a random uppercase letter or number
 	const code1 = Array.from({ length: 4 }, () =>
 		Math.random().toString(36)[2].toUpperCase()
@@ -78,22 +58,6 @@ export async function createBooking(
 			amount: Number(formData.get("amount")),
 			status: "pending"
 		},
-		cartItems: cartItems.map((item) => ({
-			id: item.id,
-			quantity: item.quantity,
-			variant: {
-				id: item.variant.id,
-				product: {
-					id: item.variant.product.id,
-					name: item.variant.product.name,
-					slug: item.variant.product.slug,
-					thumbnail: {
-						url: item.variant.product.thumbnail?.url ?? "",
-						alt: item.variant.product.thumbnail?.alt ?? "",
-					},
-				},
-			},
-		})),
 	});
 
 	if (!parse.success) {
@@ -104,18 +68,22 @@ export async function createBooking(
 	}
 
 	const booking = parse.data.booking;
-	const cartItemsData = parse.data.cartItems;
-	// console.log a single cart item
-	console.log(cartItemsData[0]);
-	return {
-		message: "Booking created",
-		status: "success",
-	};
 
 	try {
 		await prisma.booking.create({
 			data: booking,
 		});
+		for (const item of cartItems3) {
+			await prisma.bookedItem.create({
+				data: {
+					product_name: item.productName,
+					product_price: item.price,
+					product_variant: item.variantName,
+					quantity: item.quantity,
+					bookingCode: booking.code,
+				},
+			});
+		}
 		try {
 			// 👉Order placed. Sending payment request
 			// make api call to request payment https://api.mypayd.app/api/v2/payments using basic auth
@@ -153,8 +121,6 @@ export async function createBooking(
 				message: message,
 				status: status
 			};
-			// 👉Payment received. Processing order
-			// save the items in the cart to the database
 			// clear cart and display success message
 			// 👉Order successful. Redirecting to home page
 		} catch (error) {
@@ -164,6 +130,7 @@ export async function createBooking(
 			};
 		}
 	} catch (error) {
+		console.error(error);
 		return {
 			message: "An error occurred while creating the booking",
 			status: "error",
