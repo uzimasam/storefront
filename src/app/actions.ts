@@ -19,7 +19,7 @@ export async function createBooking(
 		prevState.message = "";
 	}
 	catch(e){
-		console.log(e);
+		console.error(e);
 	}
 	const schema = z.object({
 		booking: z.object({
@@ -32,7 +32,11 @@ export async function createBooking(
 			status: z.string()
 		}),
 	});
-
+	// link cart items to the booking
+	const checkoutId = formData.get("cart") as string;
+	const cartItems = formData.getAll("cartItems") as string[];
+	const cartItems2 = cartItems.map((item) => JSON.parse(item));
+	const cartItems3 = cartItems2[0] as { productName: string; variantName: string; quantity: number; price: number }[];
 	// generate a new booking code in the format XXXX-XXXX where X is a random uppercase letter or number
 	const code1 = Array.from({ length: 4 }, () =>
 		Math.random().toString(36)[2].toUpperCase()
@@ -54,11 +58,10 @@ export async function createBooking(
 		},
 	});
 
-
 	if (!parse.success) {
-		console.log("Failed to create booking", parse.error);
 		return {
 			message: "Failed to create booking",
+			status: "error",
 		};
 	}
 
@@ -68,48 +71,68 @@ export async function createBooking(
 		await prisma.booking.create({
 			data: booking,
 		});
-		// 👉Order placed. Sending payment request
-		// make api call to request payment https://api.mypayd.app/api/v2/payments using basic auth
-		const url = "https://api.mypayd.app/api/v2/payments";
-		const username = process.env.MYPAYD_API_USERNAME;
-		const password = process.env.MYPAYD_API_PASSWORD;
-		const wallet = process.env.MYPAYD_WALLET;
-		const response = await fetch(url, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: "Basic " + btoa(username + ":" + password),
-			},
-			body: JSON.stringify({
-				username: wallet,
-				network_code: "63902",
-				amount: booking.amount,
-				currency: "KES",
-				phone_number: booking.phone_number,
-				narration: " Payment Request at House of Qacym",
-				callback_url: "https://houseofqacym.vercel.app/api/callback/" + booking.code,
-			}),
-		});
-		const data = await response.json() as { message: string };
-		console.log(data);
-		// 👉Gateway message. Waiting for payment
-		// if successful, return the message from the payment gateway
-		// 👉Payment received. Processing order
-		// save the items in the cart to the database
-		// clear cart and display success message
-		// 👉Order successful. Redirecting to home page
-		return {
-			// message from the payment gateway
-			message: data.message,
-		};
+		for (const item of cartItems3) {
+			await prisma.bookedItem.create({
+				data: {
+					product_name: item.productName,
+					product_price: item.price,
+					product_variant: item.variantName,
+					quantity: item.quantity,
+					bookingCode: booking.code,
+				},
+			});
+		}
+		try {
+			// 👉Order placed. Sending payment request
+			// make api call to request payment https://api.mypayd.app/api/v2/payments using basic auth
+			const url = "https://api.mypayd.app/api/v2/payments";
+			const username = process.env.MYPAYD_API_USERNAME;
+			const password = process.env.MYPAYD_API_PASSWORD;
+			const wallet = process.env.MYPAYD_WALLET;
+			const response = await fetch(url, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Basic " + btoa(username + ":" + password),
+				},
+				body: JSON.stringify({
+					username: wallet,
+					network_code: "63902",
+					amount: booking.amount,
+					currency: "KES",
+					phone_number: booking.phone_number,
+					narration: " Payment Request at House of Qacym",
+					callback_url: "https://houseofqacym.vercel.app/api/booking/callback/" + booking.code,
+				}),
+			});
+			const data = await response.json() as { data: any; message: string; success: string; };
+			let message = data.message;
+			let status = "error";
+			if (message === "STK Push is sent to customer") {
+				message = "Payment request sent has been sent to your phone. Please check your phone to complete the payment";
+				status = "success";
+			} else {
+				message = "An error occurred while requesting for payment. Please try again";
+			}
+			return {
+				// message from the payment gateway
+				message: message,
+				status: status
+			};
+			// clear cart and display success message
+			console.log("Checkout ID: ", checkoutId);
+			// 👉Order successful. Redirecting to home page
+		} catch (error) {
+			return {
+				message: "An error occurred while requesting for payment",
+				status: "error",
+			};
+		}
 	} catch (error) {
+		console.error(error);
 		return {
 			message: "An error occurred while creating the booking",
+			status: "error",
 		};
 	}
-
-	// retun a success response
-	return {
-		message: "Booking created successfully",
-	};
 }

@@ -31,6 +31,13 @@ export default async function Page({ params }: { params: { channel: string } }) 
 		);
 	}
 
+	const cartItems = checkout.lines.map((item) => ({
+		productName: item.variant?.product?.name,
+		variantName: item.variant.name,
+		quantity: item.quantity,
+		price: item.totalPrice.gross.amount,
+	}));
+
 	return (
 		<section className="mx-auto max-w-7xl p-8">
 			<h1 className="mt-8 text-3xl font-bold text-neutral-900">Your Shopping Cart</h1>
@@ -94,7 +101,7 @@ export default async function Page({ params }: { params: { channel: string } }) 
 					</div>
 				</div>
 			</div>
-			<BookingForm amount={(checkout.totalPrice.gross.amount)} />
+			<BookingForm amount={(checkout.totalPrice.gross.amount)} checkoutId={checkoutId} cartItems={cartItems} />
 		</section>
 	);
 }
