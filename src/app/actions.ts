@@ -1,7 +1,6 @@
 "use server";
 
 import { z } from "zod";
-import * as Checkout from "@/lib/checkout";
 import { getServerAuthClient } from "@/app/config";
 import prisma from "@/lib/server";
 
@@ -35,7 +34,6 @@ export async function createBooking(
 	});
 	// link cart items to the booking
 	const checkoutId = formData.get("cart") as string;
-	const checkout = await Checkout.find(checkoutId);
 	const cartItems = formData.getAll("cartItems") as string[];
 	const cartItems2 = cartItems.map((item) => JSON.parse(item));
 	const cartItems3 = cartItems2[0] as { productName: string; variantName: string; quantity: number; price: number }[];
@@ -122,6 +120,7 @@ export async function createBooking(
 				status: status
 			};
 			// clear cart and display success message
+			console.log("Checkout ID: ", checkoutId);
 			// 👉Order successful. Redirecting to home page
 		} catch (error) {
 			return {

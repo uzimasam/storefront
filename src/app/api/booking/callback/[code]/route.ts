@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
-import { EmailTemplate } from '@/app/components/email';
+import { AdminEmail, ClientEmail } from '@/app/components/email';
 import prisma from '@/lib/server';
 
 export async function POST(_: NextRequest, { params }: { params: { code: string } }) {
@@ -35,11 +35,13 @@ export async function POST(_: NextRequest, { params }: { params: { code: string 
         },
     });
 
-    // send email to the user via api route /api/client/send
     const resend = new Resend(process.env.RESEND_API_KEY);
     const email = booking.email;
+    // get admin email from env
+    const adminmail = process.env.ADMIN_EMAIL || "uzimasamuel1@gmail.com";
     const firstName = booking.first_name;
-    // create date in format 10th May 2023 from createdAt and time in format 10:00 AM
+    const fullName = booking.first_name + " " + booking.last_name;
+    const phoneNumber = booking.phone_number;
     const createdAt = new Date(booking.createdAt);
     const formattedDate = new Intl.DateTimeFormat('en-GB', { 
         day: '2-digit', 
@@ -84,38 +86,53 @@ export async function POST(_: NextRequest, { params }: { params: { code: string 
                 from: "House of Qacym <onboarding@resend.dev>",
                 to: [email],
                 subject: "Booking Confirmation",
-                react: EmailTemplate({
+                react: ClientEmail({
                     firstName: firstName,
+                    fullName: fullName,
+                    email: email,
+                    phoneNumber: phoneNumber,
                     bookingDetails,
                 }),
             }
         );
 
         if (error) {
-            return new Response(JSON.stringify({ error }), {
-                status: 500,
-                headers: {
-                    "content-type": "application/json",
-                },
-            });
+            console.error(error);
         }
-
-        return new Response(JSON.stringify({ data }), {
-            status: 200,
-            headers: {
-                "content-type": "application/json",
-            },
-        });
+        else {
+            console.log(data);
+        }
     }
     catch(error) {
-        return new Response(JSON.stringify({ error }), {
-            status: 500,
-            headers: {
-                "content-type": "application/json",
-            },
-        });
+        console.error(error);
     }
-    // send email to the admin via api route /api/admin/send
+
+    try {
+        const { data, error } = await resend.emails.send(
+            {
+                from: "House of Qacym <onboarding@resend.dev>",
+                to: [adminmail],
+                subject: "New Booking",
+                react: AdminEmail({
+                    firstName: firstName,
+                    fullName: fullName,
+                    email: email,
+                    phoneNumber: phoneNumber,
+                    bookingDetails,
+                }),
+            }
+        );
+
+        if (error) {
+            console.error(error);
+        }
+        else {
+            console.log(data);
+        }
+    }
+    catch(error) {
+        console.error(error);
+    }
 
     return new NextResponse(
         JSON.stringify({
