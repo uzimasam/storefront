@@ -60,7 +60,7 @@ interface BookingFormProps {
 
 export function BookingForm({amount, checkoutId, cartItems }: BookingFormProps) {
     const formRef = useRef<HTMLFormElement | null>(null);
-    const [state, formAction] = useFormState(createBooking, initialState );
+    const [state] = useFormState(createBooking, initialState );
     const [isSuccess, setIsSuccess] = useState(false);
     const [isError, setIsError] = useState(false);
     const [serverResponse, setServerResponse] = useState<string | null>(null);
