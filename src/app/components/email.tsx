@@ -9,6 +9,7 @@ interface EmailTemplateProps {
         time: string;
         products: {
             name: string;
+            variant: string;
             quantity: number;
             amount: number;
         }[];
@@ -42,6 +43,7 @@ export const EmailTemplate: React.FC<EmailTemplateProps> = ({ firstName, booking
                 <thead>
                     <tr>
                         <th style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'left', backgroundColor: '#f2f2f2' }}>Product</th>
+                        <th style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'left', backgroundColor: '#f2f2f2' }}>Variant</th>
                         <th style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'left', backgroundColor: '#f2f2f2' }}>Quantity</th>
                         <th style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'left', backgroundColor: '#f2f2f2' }}>Amount</th>
                     </tr>
@@ -50,14 +52,15 @@ export const EmailTemplate: React.FC<EmailTemplateProps> = ({ firstName, booking
                     {bookingDetails.products.map((product, index) => (
                         <tr key={index}>
                             <td style={{ border: '1px solid #ddd', padding: '8px' }}>{product.name}</td>
+                            <td style={{ border: '1px solid #ddd', padding: '8px' }}>{product.variant}</td>
                             <td style={{ border: '1px solid #ddd', padding: '8px' }}>{product.quantity}</td>
-                            <td style={{ border: '1px solid #ddd', padding: '8px' }}>{product.amount}</td>
+                            <td style={{ border: '1px solid #ddd', padding: '8px' }}>KES {product.amount}</td>
                         </tr>
                     ))}
                     <tr>
-                        <td style={{ border: '1px solid #ddd', padding: '8px' }} colSpan={2}><strong>Total</strong></td>
+                        <td style={{ border: '1px solid #ddd', padding: '8px' }} colSpan={3}><strong>Total</strong></td>
                         <td style={{ border: '1px solid #ddd', padding: '8px' }}>
-                            <strong>{bookingDetails.products.reduce((total, product) => total + product.amount, 0)}</strong>
+                            <strong>KES {bookingDetails.products.reduce((total, product) => total + product.amount, 0)}</strong>
                         </td>
                     </tr>
                 </tbody>
