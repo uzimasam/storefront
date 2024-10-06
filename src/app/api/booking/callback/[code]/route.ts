@@ -42,6 +42,7 @@ export async function POST(_: NextRequest, { params }: { params: { code: string 
     const firstName = booking.first_name;
     const fullName = booking.first_name + " " + booking.last_name;
     const phoneNumber = booking.phone_number;
+    const location = booking.location;
     const createdAt = new Date(booking.createdAt);
     const formattedDate = new Intl.DateTimeFormat('en-GB', { 
         day: '2-digit', 
@@ -91,6 +92,7 @@ export async function POST(_: NextRequest, { params }: { params: { code: string 
                     fullName: fullName,
                     email: email,
                     phoneNumber: phoneNumber,
+                    location: location,
                     bookingDetails,
                 }),
             }
@@ -118,6 +120,7 @@ export async function POST(_: NextRequest, { params }: { params: { code: string 
                     fullName: fullName,
                     email: email,
                     phoneNumber: phoneNumber,
+                    location: location,
                     bookingDetails,
                 }),
             }

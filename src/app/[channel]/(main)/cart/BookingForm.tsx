@@ -230,6 +230,29 @@ export function BookingForm({amount, checkoutId, cartItems }: BookingFormProps) 
                                     </label>
                                 </div>
                             </div>
+                            <div className="grid grid-cols-1 gap-4 lg:grid-cols-1 lg:gap-8 py-4">
+                                <div className="rounded-lg">
+                                    <label
+                                        htmlFor="location"
+                                        className="relative block overflow-hidden rounded-md border border-neutral-300 bg-transparent bg-white px-4 py-2 pr-10 text-sm text-black placeholder:text-neutral-500 focus:border-black focus:ring-black"
+                                    >
+                                        <input
+                                            type="text"
+                                            id="location"
+                                            name="location"
+                                            placeholder="Delivery Location"
+                                            autoComplete="street-address"
+                                            className="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
+                                            required
+                                        />
+                                        <span
+                                            className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs"
+                                        >
+                                            Delivery Location
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
                             <p className="mt-1 text-sm text-neutral-500">The email you provide will be used to send you a receipt of your purchase and a link to track your order.</p>
                         </div>
                     </div>

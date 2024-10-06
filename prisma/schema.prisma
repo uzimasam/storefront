@@ -21,6 +21,7 @@ model Booking {
   email             String
   phone_number      String
   amount            Float
+  location          String
   status            String
   callback_response String?
   cartItems         BookedItem[]

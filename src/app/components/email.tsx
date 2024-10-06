@@ -6,6 +6,7 @@ interface EmailTemplateProps {
     fullName: string;
     email: string;
     phoneNumber: string;
+    location: string;
     bookingDetails: {
         bookingId: string;
         date: string;

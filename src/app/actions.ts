@@ -29,6 +29,7 @@ export async function createBooking(
 			email: z.string(),
 			phone_number: z.string(),
 			amount: z.number(),
+			location: z.string(),
 			status: z.string()
 		}),
 	});
@@ -54,6 +55,7 @@ export async function createBooking(
 			email: formData.get("email") as string,
 			phone_number: formData.get("phone_number") as string,
 			amount: Number(formData.get("amount")),
+			location: formData.get("location") as string,
 			status: "pending"
 		},
 	});
