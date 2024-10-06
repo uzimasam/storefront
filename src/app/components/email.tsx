@@ -73,7 +73,7 @@ export const ClientEmail: React.FC<EmailTemplateProps> = ({ firstName, bookingDe
             </CardContent>
             <CardFooter>
                 <CardDescription>
-                    If you have any questions, please contact us at support@houseofqacym.com or call us at +234 123 456 7890. Alternatively, you can reply to this email.
+                    If you have any questions, please contact us at houseofqaciim@gmail.com, whatsapp or call us at +254 702 999 903.
                 </CardDescription>
             </CardFooter>
         </Card>

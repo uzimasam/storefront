@@ -38,7 +38,7 @@ export async function POST(_: NextRequest, { params }: { params: { code: string 
     const resend = new Resend(process.env.RESEND_API_KEY);
     const email = booking.email;
     // get admin email from env
-    const adminmail = process.env.ADMIN_EMAIL || "uzimasamuel1@gmail.com";
+    const adminmail = process.env.ADMIN_EMAIL || "houseofqaciim@gmail.com";
     const firstName = booking.first_name;
     const fullName = booking.first_name + " " + booking.last_name;
     const phoneNumber = booking.phone_number;
