@@ -1,11 +1,12 @@
 import edjsHTML from "editorjs-html";
 import { revalidatePath } from "next/cache";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { type ResolvingMetadata, type Metadata } from "next";
 import xss from "xss";
 import { invariant } from "ts-invariant";
 import { type WithContext, type Product } from "schema-dts";
 import { AddButton } from "./AddButton";
+import { BuyNow } from "./BuyNow";
 import { VariantSelector } from "@/ui/components/VariantSelector";
 import { ProductImageWrapper } from "@/ui/atoms/ProductImageWrapper";
 import { executeGraphQL } from "@/lib/graphql";
@@ -127,6 +128,36 @@ export default async function Page({
 		revalidatePath("/cart");
 	}
 
+	async function buyItemNow() {
+		"use server";
+
+		const checkout = await Checkout.findOrCreate({
+			checkoutId: Checkout.getIdFromCookies(params.channel),
+			channel: params.channel,
+		});
+		invariant(checkout, "This should never happen");
+
+		Checkout.saveIdToCookie(params.channel, checkout.id);
+
+		if (!selectedVariantID) {
+			return;
+		}
+
+		// TODO: error handling
+		await executeGraphQL(CheckoutAddLineDocument, {
+			variables: {
+				id: checkout.id,
+				productVariantId: decodeURIComponent(selectedVariantID),
+			},
+			cache: "no-cache",
+		});
+
+		revalidatePath("/cart");
+
+		// Redirect to the cart page
+		redirect("/default-channel/cart");
+	}
+
 	const isAvailable = variants?.some((variant) => variant.quantityAvailable) ?? false;
 
 	const price = selectedVariant?.pricing?.price?.gross
@@ -179,7 +210,7 @@ export default async function Page({
 					__html: JSON.stringify(productJsonLd),
 				}}
 			/>
-			<form className="grid gap-2 sm:grid-cols-2 lg:grid-cols-8" action={addItem}>
+			<div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-8">
 				<div className="md:col-span-1 lg:col-span-5">
 					{firstImage && (
 						<ProductImageWrapper
@@ -209,8 +240,15 @@ export default async function Page({
 							/>
 						)}
 						<AvailabilityMessage isAvailable={isAvailable} />
-						<div className="mt-8">
-							<AddButton disabled={!selectedVariantID || !selectedVariant?.quantityAvailable} />
+						<div className="mt-8">	
+							<div className="flex flex-wrap gap-3">
+                                <form action={addItem} method="post">
+                                    <AddButton disabled={!selectedVariantID || !selectedVariant?.quantityAvailable} />
+                                </form>
+                                <form action={buyItemNow} method="post">
+                                    <BuyNow disabled={!selectedVariantID || !selectedVariant?.quantityAvailable} />
+                                </form>
+                            </div>
 						</div>
 						{description && (
 							<div className="mt-8 space-y-6 text-sm text-neutral-500">
@@ -221,7 +259,7 @@ export default async function Page({
 						)}
 					</div>
 				</div>
-			</form>
+			</div>
 		</section>
 	);
 }
